@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python: ["3.11", "3.12"]
+    runs-on: ${{ matrix.os }}
+    env:
+      LIBGL_ALWAYS_SOFTWARE: "1"
+      MESA_GL_VERSION_OVERRIDE: "3.3"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+      - name: Install Mesa for headless EGL
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libegl1-mesa-dev mesa-utils
+      - name: Install package
+        run: python -m pip install -e ".[dev]"
+      - name: Lint
+        run: python -m ruff check .
+      - name: Test with coverage
+        run: python -m pytest --cov=opengl_system_test --cov-report=term --cov-report=xml --cov-fail-under=85
+      - name: Run headless EGL workloads
+        if: runner.os == 'Linux'
+        run: opengl-system-test run --config config/scenarios.json --output artifacts/ci --backend egl
+      - name: Run Windows WGL workloads
+        if: runner.os == 'Windows'
+        run: opengl-system-test run --config config/scenarios.json --output artifacts/ci --backend auto
+      - name: Upload verification evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: graphics-evidence-${{ matrix.os }}-py${{ matrix.python }}
+          path: |
+            artifacts/ci
+            coverage.xml
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install build
+      - run: python -m build
+      - uses: actions/upload-artifact@v7
+        with:
+          name: python-package
+          path: dist/*

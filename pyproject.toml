@@ -1,0 +1,50 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "opengl-system-test-harness"
+version = "0.1.0"
+description = "Headless OpenGL workload validation, image comparison, diagnostics, and CI reporting"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [{name = "Thanu Reddy Pathipati"}]
+dependencies = [
+  "moderngl>=5.12,<6",
+  "numpy>=2.0,<3",
+  "Pillow>=11,<14",
+]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2,<2",
+  "pytest>=8,<10",
+  "pytest-cov>=6,<8",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+opengl-system-test = "opengl_system_test.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/opengl_system_test"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+markers = ["graphics: requires creation of a headless OpenGL context"]
+
+[tool.coverage.run]
+source = ["opengl_system_test"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]

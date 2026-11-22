@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "minimum_gl_version": 330,
+  "invalid_shader_probe": true,
+  "scenarios": [
+    {
+      "name": "solid-color-readback",
+      "workload": "solid_color",
+      "width": 96,
+      "height": 64,
+      "warmup_runs": 1,
+      "measured_runs": 5,
+      "tolerance": {"channel_delta": 1, "failed_pixel_ratio": 0.0},
+      "max_unique_images": 1
+    },
+    {
+      "name": "nearest-texture-quadrants",
+      "workload": "texture_quadrants",
+      "width": 96,
+      "height": 64,
+      "warmup_runs": 1,
+      "measured_runs": 5,
+      "tolerance": {"channel_delta": 0, "failed_pixel_ratio": 0.0},
+      "max_unique_images": 1
+    },
+    {
+      "name": "alpha-blend-layers",
+      "workload": "alpha_blend",
+      "width": 96,
+      "height": 64,
+      "warmup_runs": 1,
+      "measured_runs": 5,
+      "tolerance": {"channel_delta": 1, "failed_pixel_ratio": 0.0},
+      "max_unique_images": 1
+    },
+    {
+      "name": "depth-order-overlap",
+      "workload": "depth_overlap",
+      "width": 96,
+      "height": 64,
+      "warmup_runs": 1,
+      "measured_runs": 5,
+      "tolerance": {"channel_delta": 0, "failed_pixel_ratio": 0.0},
+      "max_unique_images": 1
+    }
+  ]
+}
