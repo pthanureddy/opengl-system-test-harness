@@ -69,10 +69,12 @@ manual failure analysis.
 
 ## CI
 
-GitHub Actions runs lint, tests, coverage, package build, and the complete
-graphics suite on Python 3.11/3.12 for Windows and Linux. Linux uses Mesa
-software rendering through EGL; Windows uses a standalone WGL context. The
-workflow uploads reports, PNGs, coverage and the built package.
+GitHub Actions runs lint and portable tests on Python 3.11/3.12 for Windows and
+Linux, then runs the complete graphics suite and coverage gate on Linux using
+Mesa software rendering through EGL. The hosted Windows image does not expose a
+usable OpenGL 3.3 WGL context, so Windows graphics execution is verified on a
+local GPU rather than misrepresented as a hosted run. The workflow uploads
+Linux reports, PNGs and coverage plus the built package.
 
 The repository also contains a GitLab CI definition that executes the same
 headless EGL path and publishes JUnit, Cobertura coverage, images and packages.

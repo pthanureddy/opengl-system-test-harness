@@ -5,6 +5,7 @@ stages: [verify]
 variables:
   LIBGL_ALWAYS_SOFTWARE: "1"
   MESA_GL_VERSION_OVERRIDE: "3.3"
+  OPENGL_TEST_BACKEND: "egl"
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
 
 cache:

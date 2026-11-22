@@ -14,6 +14,8 @@
 | GFX-010 | Reject malformed, ambiguous, duplicate, or out-of-bound scenario configuration. | Configuration unit tests. |
 
 The default run uses four workloads, five measured repetitions per workload,
-and one warm-up repetition. CI executes the suite on Windows and Linux. Linux
-uses Mesa software rendering through EGL; Windows uses the hosted runner's WGL
-implementation.
+and one warm-up repetition. Hosted Linux CI executes the graphics suite with
+Mesa software rendering through EGL. Hosted Windows executes the portable
+configuration, analysis, reporting and CLI tests because the standard runner
+does not expose a usable OpenGL 3.3 WGL context. A local Windows GPU run remains
+the Windows graphics verification path.

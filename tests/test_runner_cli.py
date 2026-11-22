@@ -1,4 +1,5 @@
 import json
+import os
 
 import pytest
 
@@ -44,7 +45,9 @@ def test_validate_command(tmp_path, capsys):
 def test_runner_writes_all_reports(tmp_path):
     config = load_config(_config_file(tmp_path))
     output = tmp_path / "artifacts"
-    report = run_harness(config, output)
+    report = run_harness(
+        config, output, backend=os.getenv("OPENGL_TEST_BACKEND", "auto")
+    )
     assert report["status"] == "passed"
     assert (output / "report.json").is_file()
     assert (output / "report.junit.xml").is_file()

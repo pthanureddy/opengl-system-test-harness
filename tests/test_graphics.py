@@ -1,3 +1,5 @@
+import os
+
 import pytest
 
 from opengl_system_test.analysis import compare_images
@@ -7,7 +9,7 @@ from opengl_system_test.models import Tolerance
 
 @pytest.fixture(scope="module")
 def session():
-    graphics = GraphicsSession()
+    graphics = GraphicsSession(backend=os.getenv("OPENGL_TEST_BACKEND", "auto"))
     yield graphics
     graphics.close()
 
