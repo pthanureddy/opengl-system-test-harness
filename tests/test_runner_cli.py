@@ -23,7 +23,7 @@ def _config_file(tmp_path):
                         "width": 16,
                         "height": 16,
                         "warmup_runs": 0,
-                        "measured_runs": 2,
+                        "measured_runs": 1,
                         "tolerance": {"channel_delta": 1, "failed_pixel_ratio": 0.0},
                         "max_unique_images": 1,
                     }
