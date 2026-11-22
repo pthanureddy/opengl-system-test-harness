@@ -45,13 +45,14 @@ jobs:
         if: runner.os == 'Linux'
         run: opengl-system-test run --config config/scenarios.json --output artifacts/ci --backend egl
       - name: Upload verification evidence
-        if: runner.os == 'Linux'
+        if: always() && runner.os == 'Linux'
         uses: actions/upload-artifact@v7
         with:
           name: graphics-evidence-${{ matrix.os }}-py${{ matrix.python }}
           path: |
             artifacts/ci
             coverage.xml
+          if-no-files-found: warn
 
   package:
     runs-on: ubuntu-latest

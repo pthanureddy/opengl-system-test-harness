@@ -105,11 +105,16 @@ def run_harness(
                 LOGGER.exception("scenario_error name=%s", scenario.name)
             results.append(result)
             LOGGER.info(
-                "scenario_finished name=%s status=%s median_ms=%s p95_ms=%s",
+                "scenario_finished name=%s status=%s median_ms=%s p95_ms=%s "
+                "unique_images=%s max_channel_delta=%s failed_pixel_ratio=%s error=%s",
                 result.name,
                 result.status,
                 result.median_ms,
                 result.p95_ms,
+                len(set(result.image_hashes)),
+                result.comparison.max_channel_delta if result.comparison else None,
+                result.comparison.failed_pixel_ratio if result.comparison else None,
+                result.error,
             )
 
         report = {
