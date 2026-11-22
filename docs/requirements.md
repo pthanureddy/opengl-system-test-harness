@@ -3,7 +3,7 @@
 | ID | Requirement | Verification |
 | --- | --- | --- |
 | GFX-001 | Create a headless OpenGL 3.3 or newer context and record renderer capabilities. | Graphics context test and every harness run. |
-| GFX-002 | Compile and execute vertex and fragment shaders without a window system. | Solid-color workload and graphics integration tests. |
+| GFX-002 | Compile and execute vertex and fragment shaders without a window system. | Texture, blend and depth workloads plus graphics integration tests. |
 | GFX-003 | Validate nearest texture sampling against an analytical reference image. | Texture-quadrant workload with zero channel tolerance. |
 | GFX-004 | Validate source-alpha blending against an analytical RGB reference. | Alpha-blend workload with one-channel rounding tolerance. |
 | GFX-005 | Detect incorrect depth ordering in overlapping geometry. | Depth-overlap workload draws near geometry first and far geometry second. |

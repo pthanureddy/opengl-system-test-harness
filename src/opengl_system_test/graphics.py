@@ -104,31 +104,19 @@ class GraphicsSession:
         return program, buffer, vao
 
     def _solid_color(self, width: int, height: int) -> RenderedWorkload:
-        fragment = """
-        #version 330
-        uniform vec3 color;
-        out vec4 fragColor;
-        void main() { fragColor = vec4(color, 1.0); }
-        """
         fbo = self._framebuffer(width, height)
-        program, buffer, vao = self._fullscreen_program(fragment)
         try:
             fbo.use()
             self.context.disable(moderngl.BLEND | moderngl.DEPTH_TEST)
-            fbo.clear(0.0, 0.0, 0.0, 1.0)
-            # Endpoint channel values avoid implementation-defined color dithering,
-            # making this workload suitable for strict cross-run hash stability.
-            program["color"].value = (1.0, 0.0, 1.0)
-            vao.render(moderngl.TRIANGLES)
+            # Endpoint channel values and framebuffer clear avoid implementation-
+            # defined dithering, making this a strict readback/hash stability probe.
+            fbo.clear(1.0, 0.0, 1.0, 1.0)
             self.context.finish()
             actual = self._read_rgb(fbo, width, height)
             expected = np.empty_like(actual)
             expected[:, :, :] = np.array([255, 0, 255], dtype=np.uint8)
             return RenderedWorkload(actual, expected)
         finally:
-            vao.release()
-            buffer.release()
-            program.release()
             fbo.release()
 
     def _texture_quadrants(self, width: int, height: int) -> RenderedWorkload:
