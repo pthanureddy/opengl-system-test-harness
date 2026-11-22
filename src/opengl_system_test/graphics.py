@@ -116,12 +116,14 @@ class GraphicsSession:
             fbo.use()
             self.context.disable(moderngl.BLEND | moderngl.DEPTH_TEST)
             fbo.clear(0.0, 0.0, 0.0, 1.0)
-            program["color"].value = (0.125, 0.5, 0.875)
+            # Endpoint channel values avoid implementation-defined color dithering,
+            # making this workload suitable for strict cross-run hash stability.
+            program["color"].value = (1.0, 0.0, 1.0)
             vao.render(moderngl.TRIANGLES)
             self.context.finish()
             actual = self._read_rgb(fbo, width, height)
             expected = np.empty_like(actual)
-            expected[:, :, :] = np.array([32, 128, 223], dtype=np.uint8)
+            expected[:, :, :] = np.array([255, 0, 255], dtype=np.uint8)
             return RenderedWorkload(actual, expected)
         finally:
             vao.release()
